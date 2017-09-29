@@ -5,6 +5,7 @@ var AV = require('leanengine');
 // 判断是否登录 if(request.currentUser)
 
 AV.Cloud.define('DiveLog.GetGroupId', function(request) {
+	return { "GroupId": request.body.LogId};
 	// 声明一个 Todo 类型
 	var DiveGroup = AV.Object.extend('DiveGroup');
 	// 新建一个 Todo 对象
@@ -17,6 +18,4 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 		// 异常处理
 		console.error('Failed to create new object, with error message: ' + error.message);
 	});
-
-	return { "GroupId": request.body.LogId};
 });
