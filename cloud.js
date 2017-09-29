@@ -1,6 +1,6 @@
 var AV = require('leanengine');
 
 
-AV.Cloud.define('getGroupId', function(request) {
+AV.Cloud.define('DiveLog.GetGroupId', function(request) {
   return { "groupId": 1234};
 });
