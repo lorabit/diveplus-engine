@@ -67,7 +67,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 
 	// res.success({"Result": 1});
 
-	if (!Coder.isValue(groupId)) {
+	if (!Coder.isValid(groupId)) {
 		res.error({"Error":"Invalid group id"});
 		return;
 	}
