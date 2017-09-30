@@ -10,6 +10,13 @@ var errorFn = function (res) {
     }
 };
 
+function guid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+}
+
 // 获取用户名 request.currentUser.get("username")
 // 判断是否登录 if(request.currentUser)
 
@@ -56,19 +63,55 @@ AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
 AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 	var userId = req.params.UserId;
 	var groupId = req.params.GroupId;
-	
-	query = new AV.Query('DiveLog')
 
-	var diveGroup = new DiveGroup();
-	// todo.set('title', '工程师周会');
-	diveGroup.save().then(function (diveGroup) {
-		// 成功保存之后，执行其他逻辑.
-		console.log('New object created with objectId: ' + diveGroup.id);
-	}, function (error) {
-		// 异常处理
-		console.error('Failed to create new object, with error message: ' + error.message);
-	});
-	return { "GroupId": request.params.LogId};
+	new AV.Query('User').get(userId).then(function (user) {
+		if (user) {
+			var logCount  = user.get('diveLogCount');
+			var logHour = user.get('diveHourCount');
+			var logCountLife = user.get('diveLogCountLife');
+			var logHourLife = user.get('diveHourCountLife');
+
+			var query = new AV.Query('DiveLog');
+				query.equalTo('groupId', groupId);
+				query.find().then(function (divelogs) {
+				var theDivelog;
+				for (var i = 0; i < divelogs.length; i++) {
+					var divelog = divelogs[i];
+					var uid = divelog.get('user');
+					var isCreator = divelog.get('isCreator');
+					if (uid == userId) {
+						// 去重
+						errorFn({"Error":"Already has divelog"});
+					};
+					if (isCreator) {
+						theDivelog = divelog;
+					};
+				}
+
+				// 复制日志
+				// var newDivelog = AV.parseJSON(originDivelog.toFullJSON())
+				var diveHour = theDivelog.get('durationDive') / 3600;
+
+				theDivelog.id = '';
+				theDivelog.set('user', userId);
+				theDivelog.set('logUUID', guid());
+				theDivelog.set('isCreator', false);
+				theDivelog.set('diveLogCount', logCount + 1);
+				theDivelog.set('diveHourCount', logHour + diveHour);
+				theDivelog.set('diveLogCountLife', logCountLife + 1);
+				theDivelog.set('diveHourCountLife', logHourLife + diveHour);
+
+				newDivelog.save();
+
+  			}, errorFn(res));
+
+		}
+		else {
+			errorFn(res);
+		}
+
+	}, errorFn(res));
+
 });
 
 // 根据userID来获取divelog里面的buddys信息，后续将所有的字段的更新放在后台
