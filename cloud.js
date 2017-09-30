@@ -11,8 +11,7 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 	var err;
 
 	var query = new AV.Query('DiveLog');
-
-	query.get(logId).then(function (divelog) {
+	return query.get(logId).then(function (divelog) {
 		if (divelog['groupId']) {
 			groupId = divelog['groupId'];
 		}
@@ -20,15 +19,16 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 			var DiveGroup = AV.Object.extend('DiveGroup');
 			var diveGroup = new DiveGroup();
 			msg = "fdsaf";
-			diveGroup.save().then(function (results) {
+			return diveGroup.save().then(function (results) {
 				// 成功保存之后，更新code
 				diveGroup = AV.Object.createWithoutData('DiveGroup', results.id);
 
-  				diveGroup.fetch({
+  				return diveGroup.fetch({
     				keys: 'index'
   				}).then(function (results) {
   					msg = results.get('index');
-  					groupId = Coder.encode(parseInt(results.get('index')));
+  					// Coder.encode(parseInt(results.get('index')));
+  					return {"GroupId": groupId, "Msg": msg}; 
   				}, function (error) {
   				});
 				
