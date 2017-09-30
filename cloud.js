@@ -90,9 +90,13 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 					};
 				}
 
+				var diveHour = theDivelog.get('durationDive') / 3600;
+				var newDiveLog = theDivelog.clone();
+				
+				res.success(newDivelog.toFullJSON());
+
 				// 复制日志
 				// var newDivelog = AV.parseJSON(originDivelog.toFullJSON())
-				var diveHour = theDivelog.get('durationDive') / 3600;
 
 				theDivelog.id = '';
 				theDivelog.set('user', userId);
@@ -101,9 +105,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				theDivelog.set('diveLogCount', logCount + 1);
 				theDivelog.set('diveHourCount', logHour + diveHour);
 				theDivelog.set('diveLogCountLife', logCountLife + 1);
-				theDivelog.set('diveHourCountLife', logHourLife + diveHour);
-
-				res.success({"Result": 1});				
+				theDivelog.set('diveHourCountLife', logHourLife + diveHour);				
 
 				newDivelog.save();
 
