@@ -67,6 +67,11 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 
 	// res.success({"Result": 1});
 
+	if (!Coder.isValue(groupId)) {
+		res.error({"Error":"Invalid group id"});
+		return;
+	}
+
 	new AV.Query('_User').get(userId).then(function (user) {		
 		if (user) {
 			var logCount  = user.get('diveLogCount');
