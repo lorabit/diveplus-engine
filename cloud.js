@@ -102,15 +102,20 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				var newUser = AV.Object.createWithoutData('_User', userId);
 				newDivelog.set('user', newUser);
 				newDivelog.set('logUUID', guid());
-				newDivelog.set('isCreator', false);
-				newDivelog.set('diveLogCount', logCount + 1);
-				newDivelog.set('diveHourCount', logHour + diveHour);
-				newDivelog.set('diveLogCountLife', logCountLife + 1);
-				newDivelog.set('diveHourCountLife', logHourLife + diveHour);				
+				newDivelog.set('isCreator', false);				
 
 				newDivelog.save().then(function (divelog) {
 
-					res.success({"LogId": divelog.id});
+					user.set('diveLogCount', logCount + 1);
+					user.set('diveHourCount', logHour + diveHour);
+					user.set('diveLogCountLife', logCountLife + 1);
+					user.set('diveHourCountLife', logHourLife + diveHour);
+
+					user.save().then(function (divelog) {
+						
+						res.success({"LogId": divelog.id});
+
+					}, errorFn(res));
 
 				}, errorFn(res));
 
