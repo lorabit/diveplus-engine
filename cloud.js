@@ -77,12 +77,13 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 			var query = new AV.Query('DiveLog');
 				query.equalTo('groupId', groupId);
 				query.find().then(function (divelogs) {
+				query
 				var theDivelog;
 				for (var i = 0; i < divelogs.length; i++) {
 					var divelog = divelogs[i];
-					var uid = divelog.get('user').id;
+					var uid = divelog.get('user');
 					var isCreator = divelog.get('isCreator');
-					if (uid == userId) {
+					if (uid.id == userId) {
 						// 去重
 						errorFn({"Error":"Already has divelog"});
 					};
