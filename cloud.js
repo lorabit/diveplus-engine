@@ -7,6 +7,11 @@ var Coder = require('./coder');
 AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 	var groupId;
 	var logId = request.params.LogId;
+	var msg = "";
+
+	msg = msg + logId;
+
+	return { "GroupId": logId, "Msg": msg };
 
 	var DiveGroup = AV.Object.extend('DiveGroup');
 	var diveGroup = new DiveGroup();
