@@ -64,9 +64,9 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 	var userId = req.params.UserId;
 	var groupId = req.params.GroupId;
 
-	res.success({"Result": 1});
+	// res.success({"Result": 1});
 
-	new AV.Query('User').get(userId).then(function (user) {
+	new AV.Query('_User').get(userId).then(function (user) {
 		if (user) {
 			var logCount  = user.get('diveLogCount');
 			var logHour = user.get('diveHourCount');
