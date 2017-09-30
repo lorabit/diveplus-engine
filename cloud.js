@@ -21,13 +21,17 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 			var diveGroup = new DiveGroup();
 			diveGroup.save().then(function (results) {
 				// 成功保存之后，更新code
-				var index = parseInt(results.get('index'));
-				groupId = Coder.encode(index);
-				var bit = groupId[groupCode.length-1];
-
 				diveGroup = AV.Object.createWithoutData('DiveGroup', results.id);
+
+  				diveGroup.fetch({
+    				keys: 'index'
+  				}).then(function (results) {
+  					groupId = Coder.encode(parseInt(results.get('index')));
+  				}, function (error) {
+  				});
+				
 				diveGroup.set('groupId', groupId);
-				diveGroup.set('bit', bit);
+				diveGroup.set('bit', groupId[groupCode.length-1]);
 				diveGroup.save();
 
 			}, function (error) {
