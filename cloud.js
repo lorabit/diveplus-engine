@@ -5,54 +5,40 @@ var Coder = require('./coder');
 // 判断是否登录 if(request.currentUser)
 
 AV.Cloud.define('DiveLog.GetGroupId', function(request) {
-	var groupId;
 	var logId = request.params.LogId;
+	var groupId = "";
 	var msg = "";
+	var err;
 
-	var groupCode = Coder.encode(1);
-
-	msg = msg + logId;
-
-	var DiveGroup = AV.Object.extend('DiveGroup');
-	var diveGroup = new DiveGroup();
 	var query = new AV.Query('DiveLog');
 
-	msg = msg + "AV.QueryDiveLog";
-
 	query.get(logId).then(function (divelog) {
-		groupId = divelog['groupId']
-		return {"Msg", msg};
-		if (groupId) {
-			return { "GroupId": request.params.LogId};
+		if (divelog['groupId']) {
+			groupId = divelog['groupId'];
 		}
 		else {
 			var DiveGroup = AV.Object.extend('DiveGroup');
 			var diveGroup = new DiveGroup();
-			diveGroup.save().then(function (diveGroup) {
+			diveGroup.save().then(function (results) {
 				// 成功保存之后，更新code
-				var groupIndex = diveGroup['index'];
-				var groupCode = Coder.encode(parseInt(groupIndex));
-				var varifyBit = groupCode[groupCode.length-1];
+				var index = parseInt(results.get('index'));
+				groupId = Coder.encode(index);
+				var bit = groupId[groupCode.length-1];
 
-				return { "GroupId": groupCode, "Msg": "save" };
+				diveGroup = AV.Object.createWithoutData('DiveGroup', results.id);
+				diveGroup.set('groupId', groupId);
+				diveGroup.set('bit', bit);
+				diveGroup.save();
 
-				// diveGroup['code'] = groupCode;
-				// diveGroup['bit'] = varifyBit;
-
-				// diveGroup.save().the(function (diveGroup) {
-				// 	return { "GroupId": groupCode };
-				// }, function (error) {
-				// 	return { "GroupId": "" , "Error": error };
-				// });
 			}, function (error) {
-				// 异常处理
-				console.error('Failed to create new object, with error message: ' + error.message);
-				return { "GroupId": "" , "Error": error };
+				err = error;
 			});
 		}
 	}, function (error) {
-		return { "GroupId": "" , "Error": error };
+		err = error;
 	});
+
+	return {"GroupId": groupId, "Msg", msg, "Error": err};
 });
 
 AV.Cloud.define('DiveLog.JoinGroup', function(request) {
