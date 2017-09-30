@@ -79,10 +79,12 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				query.find().then(function (divelogs) {
 				query
 				var theDivelog;
+				var uids = "";
 				for (var i = 0; i < divelogs.length; i++) {
 					var divelog = divelogs[i];
 					var uid = divelog.get('user');
 					var isCreator = divelog.get('isCreator');
+					uids = uids + uid.id;
 					if (uid.id == userId) {
 						// 去重
 						errorFn({"Error":"Already has divelog"});
@@ -91,6 +93,9 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 						theDivelog = divelog;
 					};
 				}
+
+				res.success({"uids": uids});
+
 
 				var diveHour = theDivelog.get('durationDive') / 3600;
 
@@ -114,7 +119,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 
 					user.save().then(function (divelog) {
 
-						res.success({"LogId": divelog.id});
+						res.success({"LogId": newDivelog.id});
 
 					}, errorFn(res));
 
