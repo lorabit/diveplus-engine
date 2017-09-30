@@ -9,9 +9,11 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 	var logId = request.params.LogId;
 	var msg = "";
 
+	var groupCode = Coder.encode(1);
+
 	msg = msg + logId;
 
-	return { "GroupId": logId, "Msg": msg };
+	return { "GroupId": groupCode, "Msg": msg };
 
 	var DiveGroup = AV.Object.extend('DiveGroup');
 	var diveGroup = new DiveGroup();
