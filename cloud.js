@@ -38,7 +38,7 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 		err = error;
 	});
 
-	return {"GroupId": groupId, "Msg", msg, "Error": err};
+	return {"GroupId": groupId, "Msg": msg, "Error": err};
 });
 
 AV.Cloud.define('DiveLog.JoinGroup', function(request) {
