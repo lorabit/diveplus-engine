@@ -6,7 +6,7 @@ var Coder = require('./coder');
 
 AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 	var logId = request.params.LogId;
-	var groupId = "";
+	var groupId = "567";
 	var msg;
 	var err;
 
