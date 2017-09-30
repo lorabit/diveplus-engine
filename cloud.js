@@ -156,9 +156,9 @@ AV.Cloud.define('DiveLog.QueryDiveLog', function(request) {
 AV.Cloud.define('DiveLog.VarifyGroupId', function(req, res) {
 	var groupId = req.params.GroupId;
 	if (Coder.isValid(groupId)) {
-		return req.success({"GroupId": groupId})
+		return res.success({"GroupId": groupId})
 	}
 	else{
-		return req.error({"Error": "Wrong GroupId format"})
+		return res.error({"Error": "Wrong GroupId format"})
 	}
 });
