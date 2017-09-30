@@ -89,6 +89,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 					if (uid.id == userId) {
 						// 去重
 						res.error({"Error":"Already has divelog"});
+						return;
 					};
 
 					if (isCreator) {
