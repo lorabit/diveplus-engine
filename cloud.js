@@ -5,10 +5,11 @@ var Coder = require('./coder');
 // 判断是否登录 if(request.currentUser)
 
 AV.Cloud.define('DiveLog.GetGroupId', function(request) {
-	var DiveGroup = AV.Object.extend('DiveGroup');
-	var diveGroup = new DiveGroup();
 	var groupId;
 	var logId = request.params.LogId;
+
+	var DiveGroup = AV.Object.extend('DiveGroup');
+	var diveGroup = new DiveGroup();
 	var query = new AV.Query('DiveLog');
 	query.get(logId).then(function (divelog) {
 		groupId = divelog['groupId']
@@ -24,14 +25,16 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 				var groupCode = Coder.encode(parseInt(groupIndex));
 				var varifyBit = groupCode[groupCode.length-1];
 
-				diveGroup['code'] = groupCode;
-				diveGroup['bit'] = varifyBit;
+				return { "GroupId": groupCode, "Msg": "save" };
 
-				diveGroup.save().the(function (diveGroup) {
-					return { "GroupId": groupCode };
-				}, function (error) {
-					return { "GroupId": "" , "Error": error };
-				});
+				// diveGroup['code'] = groupCode;
+				// diveGroup['bit'] = varifyBit;
+
+				// diveGroup.save().the(function (diveGroup) {
+				// 	return { "GroupId": groupCode };
+				// }, function (error) {
+				// 	return { "GroupId": "" , "Error": error };
+				// });
 			}, function (error) {
 				// 异常处理
 				console.error('Failed to create new object, with error message: ' + error.message);
