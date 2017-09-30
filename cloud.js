@@ -91,21 +91,21 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				}
 
 				var diveHour = theDivelog.get('durationDive') / 3600;
-				var newDiveLog = theDivelog.clone();
+				var newDivelog = theDivelog.clone();
 				
-				res.success(newDivelog.toFullJSON());
+				res.success({"Result": newDivelog.id});
 
 				// 复制日志
 				// var newDivelog = AV.parseJSON(originDivelog.toFullJSON())
 
-				theDivelog.id = '';
-				theDivelog.set('user', userId);
-				theDivelog.set('logUUID', guid());
-				theDivelog.set('isCreator', false);
-				theDivelog.set('diveLogCount', logCount + 1);
-				theDivelog.set('diveHourCount', logHour + diveHour);
-				theDivelog.set('diveLogCountLife', logCountLife + 1);
-				theDivelog.set('diveHourCountLife', logHourLife + diveHour);				
+				newDivelog.id = '';
+				newDivelog.set('user', userId);
+				newDivelog.set('logUUID', guid());
+				newDivelog.set('isCreator', false);
+				newDivelog.set('diveLogCount', logCount + 1);
+				newDivelog.set('diveHourCount', logHour + diveHour);
+				newDivelog.set('diveLogCountLife', logCountLife + 1);
+				newDivelog.set('diveHourCountLife', logHourLife + diveHour);				
 
 				newDivelog.save();
 
