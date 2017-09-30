@@ -79,22 +79,23 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				query.find().then(function (divelogs) {
 				query
 				var theDivelog;
-				var uids = "";
+				// var uids = "";
 				for (var i = 0; i < divelogs.length; i++) {
 					var divelog = divelogs[i];
 					var uid = divelog.get('user');
 					var isCreator = divelog.get('isCreator');
-					uids = uids + uid.id + " / ";
+					// uids = uids + uid.id + " / ";
+					
 					if (uid.id == userId) {
 						// 去重
+						res.success({"uids": userId});
 						errorFn({"Error":"Already has divelog"});
 					};
+
 					if (isCreator) {
 						theDivelog = divelog;
 					};
 				}
-
-				res.success({"uids": uids});
 
 
 				var diveHour = theDivelog.get('durationDive') / 3600;
