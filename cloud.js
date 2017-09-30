@@ -99,7 +99,6 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				// 复制日志
 				// var newDivelog = AV.parseJSON(originDivelog.toFullJSON())
 
-				newDivelog.id = '';
 				newDivelog.set('user', userId);
 				newDivelog.set('logUUID', guid());
 				newDivelog.set('isCreator', false);
