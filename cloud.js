@@ -14,12 +14,9 @@ var errorFn = function (res) {
 // 判断是否登录 if(request.currentUser)
 
 AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
-	
 	var logId = req.params.LogId;
-
-	var DiveGroup = AV.Object.extend('DiveGroup');
 	
-	new AV.Query('DiveLog').get(logId).then(function (divelog) {
+	new DiveLog().get(logId).then(function (divelog) {
 		var groupId = divelog.get('groupId');
 		if (groupId) {
 			res.success({"GroupId": groupId});
@@ -40,11 +37,12 @@ AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
 	}, errorFn(res));
 });
 
-AV.Cloud.define('DiveLog.JoinGroup', function(request) {
-	// 声明一个 Todo 类型for (var i = 0; i < alphabet.length; i++) {
+AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
+	var userId = req.params.UserId;
+	var groupId = req.params.GroupId;
+	
+	query = new AV.Query('DiveLog')
 
-	var DiveGroup = AV.Object.extend('DiveGroup');
-	// 新建一个 Todo 对象
 	var diveGroup = new DiveGroup();
 	// todo.set('title', '工程师周会');
 	diveGroup.save().then(function (diveGroup) {
