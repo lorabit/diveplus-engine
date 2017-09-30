@@ -14,27 +14,40 @@ var errorFn = function (res) {
 // 判断是否登录 if(request.currentUser)
 
 AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
+
 	var logId = req.params.LogId;
 	
-	new DiveLog().get(logId).then(function (divelog) {
+	new AV.Query('DiveLog').get(logId).then(function (divelog) {
+
 		var groupId = divelog.get('groupId');
+
 		if (groupId) {
 			res.success({"GroupId": groupId});
 		}
 		else {
+
 			new DiveGroup().save().then(function (divegroup) {
+
 				// 成功保存之后，更新code
 				divegroup.fetch().then(function (divegroup) {
+
 					var index = parseInt(divegroup.get('index'));
 					var groupId = Coder.encode(index);
+					
 					divegroup.set('groupId', groupId);
 					divegroup.set('bit', groupId[groupId.length-1]);
 					divegroup.save();
+        			
         			res.success({"GroupId": groupId});
+
     			}, errorFn(res));
+
 			}, errorFn(res));
+
 		}
+
 	}, errorFn(res));
+	
 });
 
 AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
