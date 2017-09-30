@@ -37,6 +37,9 @@ AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
 					divegroup.set('groupId', groupId);
 					divegroup.set('bit', groupId[groupId.length-1]);
 					divegroup.save();
+
+					divelog.set('groupId', groupId);
+					divelog.save();
         			
         			res.success({"GroupId": groupId});
 
@@ -47,7 +50,7 @@ AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
 		}
 
 	}, errorFn(res));
-	
+
 });
 
 AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
