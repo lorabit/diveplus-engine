@@ -3,6 +3,7 @@ var Coder = require('./coder');
 
 var DiveGroup = AV.Object.extend('DiveGroup');
 var DiveLog = AV.Object.extend('DiveLog');
+var User = AV.Object.extend('_User');
 
 var errorFn = function (res) {
     return function (error) {
@@ -98,8 +99,8 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 
 				// 复制日志
 				// var newDivelog = AV.parseJSON(originDivelog.toFullJSON())
-
-				newDivelog.set('user', userId);
+				var newUser = AV.Object.createWithoutData('_User', userId);
+				newDivelog.set('user', newUser);
 				newDivelog.set('logUUID', guid());
 				newDivelog.set('isCreator', false);
 				newDivelog.set('diveLogCount', logCount + 1);
