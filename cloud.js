@@ -1,50 +1,43 @@
 var AV = require('leanengine');
 var Coder = require('./coder');
 
+var DiveGroup = AV.Object.extend('DiveGroup');
+var DiveLog = AV.Object.extend('DiveLog');
+
+var errorFn = function (res) {
+    return function (error) {
+        res.error(error);
+    }
+};
+
 // 获取用户名 request.currentUser.get("username")
 // 判断是否登录 if(request.currentUser)
 
-AV.Cloud.define('DiveLog.GetGroupId', function(request) {
-	var logId = request.params.LogId;
-	var groupId = "567";
-	var msg;
-	var err;
+AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
+	
+	var logId = req.params.LogId;
 
-	var query = new AV.Query('DiveLog');
-	return query.get(logId).then(function (divelog) {
-		if (divelog['groupId']) {
-			groupId = divelog['groupId'];
+	var DiveGroup = AV.Object.extend('DiveGroup');
+	
+	new AV.Query('DiveLog').get(logId).then(function (divelog) {
+		var groupId = divelog.get('groupId');
+		if (groupId) {
+			res.success({"GroupId": groupId});
 		}
 		else {
-			var DiveGroup = AV.Object.extend('DiveGroup');
-			var diveGroup = new DiveGroup();
-			msg = "fdsaf";
-			return diveGroup.save().then(function (results) {
+			new DiveGroup().save().then(function (divegroup) {
 				// 成功保存之后，更新code
-				diveGroup = AV.Object.createWithoutData('DiveGroup', results.id);
-
-  				return diveGroup.fetch({
-    				keys: 'index'
-  				}).then(function (results) {
-  					msg = results.get('index');
-  					// Coder.encode(parseInt(results.get('index')));
-  					return {"GroupId": groupId, "Msg": msg}; 
-  				}, function (error) {
-  				});
-				
-				diveGroup.set('groupId', groupId);
-				diveGroup.set('bit', groupId[groupCode.length-1]);
-				diveGroup.save();
-
-			}, function (error) {
-				err = error;
-			});
+				divegroup.fetch().then(function (divegroup) {
+					var index = parseInt(divegroup.get('index'));
+					var groupId = Coder.encode(index);
+					divegroup.set('groupId', groupId);
+					divegroup.set('bit', groupId[groupId.length-1]);
+					divegroup.save();
+        			res.success({"GroupId": groupId});
+    			}, errorFn(res));
+			}, errorFn(res));
 		}
-	}, function (error) {
-		err = error;
-	});
-
-	return {"GroupId": groupId, "Msg": msg, "Error": err};
+	}, errorFn(res));
 });
 
 AV.Cloud.define('DiveLog.JoinGroup', function(request) {
