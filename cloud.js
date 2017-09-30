@@ -153,7 +153,7 @@ AV.Cloud.define('DiveLog.QueryDiveLog', function(request) {
 	// return { "GroupId": request.params.LogId};
 });
 
-AV.Cloud.define('DiveLog.VarifyGroupID', function(req, res) {
+AV.Cloud.define('DiveLog.VarifyGroupId', function(req, res) {
 	var groupId = req.params.GroupId;
 	if (Coder.isValid(groupId)) {
 		return req.success({"GroupId": groupId})
