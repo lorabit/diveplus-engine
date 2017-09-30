@@ -80,7 +80,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				var theDivelog;
 				for (var i = 0; i < divelogs.length; i++) {
 					var divelog = divelogs[i];
-					var uid = divelog.get('user');
+					var uid = divelog.get('user').id;
 					var isCreator = divelog.get('isCreator');
 					if (uid == userId) {
 						// 去重
@@ -112,7 +112,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 					user.set('diveHourCountLife', logHourLife + diveHour);
 
 					user.save().then(function (divelog) {
-						
+
 						res.success({"LogId": divelog.id});
 
 					}, errorFn(res));
