@@ -93,7 +93,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				var diveHour = theDivelog.get('durationDive') / 3600;
 				var newDivelog = theDivelog.clone();
 				
-				res.success({"Result": newDivelog.id});
+				res.success(newDivelog.toJSON());
 
 				// 复制日志
 				// var newDivelog = AV.parseJSON(originDivelog.toFullJSON())
