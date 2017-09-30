@@ -13,13 +13,15 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 
 	msg = msg + logId;
 
-	return { "GroupId": groupCode, "Msg": msg };
-
 	var DiveGroup = AV.Object.extend('DiveGroup');
 	var diveGroup = new DiveGroup();
 	var query = new AV.Query('DiveLog');
+
+	msg = msg + "AV.QueryDiveLog";
+
 	query.get(logId).then(function (divelog) {
 		groupId = divelog['groupId']
+		return {"Msg", msg};
 		if (groupId) {
 			return { "GroupId": request.params.LogId};
 		}
