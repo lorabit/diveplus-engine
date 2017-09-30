@@ -19,6 +19,7 @@ AV.Cloud.define('DiveLog.GetGroupId', function(request) {
 		else {
 			var DiveGroup = AV.Object.extend('DiveGroup');
 			var diveGroup = new DiveGroup();
+			msg = "fdsaf";
 			diveGroup.save().then(function (results) {
 				// 成功保存之后，更新code
 				diveGroup = AV.Object.createWithoutData('DiveGroup', results.id);
