@@ -107,9 +107,11 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				newDivelog.set('diveLogCountLife', logCountLife + 1);
 				newDivelog.set('diveHourCountLife', logHourLife + diveHour);				
 
-				newDivelog.save();
+				newDivelog.save().then(function (divelog) {
 
-				res.success(newDivelog.toJSON());
+					res.success({"LogId", divelog.id});
+
+				}, errorFn(res));
 
   			}, errorFn(res));
 
