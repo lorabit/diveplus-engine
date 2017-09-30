@@ -103,6 +103,8 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 
 				newDivelog.save();
 
+				req.success({"Result": 1});
+
   			}, errorFn(res));
 
 		}
