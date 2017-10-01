@@ -80,16 +80,13 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 			var logHourLife = user.get('diveHourCountLife');
 
 			var query = new AV.Query('DiveLog');
-				query.equalTo('groupId', groupId);
-				query.find().then(function (divelogs) {
-				query
+			query.equalTo('groupId', groupId);
+			query.find().then(function (divelogs) {
 				var theDivelog;
-				// var uids = "";
 				for (var i = 0; i < divelogs.length; i++) {
 					var divelog = divelogs[i];
 					var uid = divelog.get('user');
 					var isCreator = divelog.get('isCreator');
-					// uids = uids + uid.id + " / ";
 					
 					if (uid.id == userId) {
 						// 去重
@@ -102,20 +99,15 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 					};
 				}
 
-
-				var diveHour = theDivelog.get('durationDive') / 3600;
-
-				var newDivelog = theDivelog.clone();
-				
-				// res.success(newDivelog.toJSON());
-
 				// 复制日志
-				// var newDivelog = AV.parseJSON(originDivelog.toFullJSON())
+				var diveHour = theDivelog.get('durationDive') / 3600;
+				var newDivelog = theDivelog.clone();
 				var newUser = AV.Object.createWithoutData('_User', userId);
 				newDivelog.set('user', newUser);
 				newDivelog.set('logUUID', guid());
-				newDivelog.set('isCreator', false);				
-
+				newDivelog.set('isCreator', false);	
+				newDivelog.set('logIndex', logCount + 1);
+				
 				newDivelog.save().then(function (divelog) {
 
 					user.set('diveLogCount', logCount + 1);
@@ -161,19 +153,19 @@ AV.Cloud.define('DiveLog.QueryDiveLog', function(request) {
 AV.Cloud.define('DiveLog.VarifyGroupId', function(req, res) {
 	var groupId = req.params.GroupId;
 	if (Coder.isValid(groupId)) {
-		return res.success({"GroupId": groupId})
-	}
-	else{
-		return res.error({"Error": "Wrong GroupId format"})
-	}
-});
+		var query = new AV.Query('DiveLog');
+		query.equalTo('groupId', groupId);
+		query.find().then(function (divelogs) {
+			if (divelogs) {
+				res.success({"GroupId": groupId});
+			}
+			else {
+				res.error({"Error": "GroupId does not exist"});
+			}
 
-AV.Cloud.define('VarifyGroupId', function(req, res) {
-	var groupId = req.params.GroupId;
-	if (Coder.isValid(groupId)) {
-		return res.success({"GroupId": groupId})
+		}, errorFn(res));
 	}
 	else{
-		return res.error({"Error": "Wrong GroupId format"})
+		res.error({"Error": "Wrong GroupId format"})
 	}
 });
