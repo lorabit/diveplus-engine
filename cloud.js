@@ -143,6 +143,7 @@ AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
 	query.equalTo('groupId', groupId);
 	query.include('user');
 	query.find().then(function (divelogs) {
+		return res.success({"e":1}});
 		if (divelogs && divelogs.length > 0) {
 			var users = {};
 			for (var i = 0; i < divelogs.length; i++) {
