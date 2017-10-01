@@ -142,6 +142,13 @@ AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
 
 	var query = new AV.Query('DiveLog');
 	query.equalTo('groupId', groupId);
+	query.find().then(function (divelogs) {
+		return res.success({"gid":groupId});
+
+	}, errorFn(res));
+
+	var query = new AV.Query('DiveLog');
+	query.equalTo('groupId', groupId);
 	query.include('user');
 	query.find().then(function (divelogs) {
 
