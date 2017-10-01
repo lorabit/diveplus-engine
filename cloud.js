@@ -142,7 +142,8 @@ AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
 	var query = new AV.Query('DiveLog');
 	query.equalTo('groupId', groupId);
 	query.find().then(function (divelogs) {
-
+		res.success({"a":1});
+		return;
 		if (divelogs && divelogs.length > 0) {
 			// var users = {};
 			// for (var i = 0; i < divelogs.length; i++) {
@@ -156,25 +157,6 @@ AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
 		}
 
 	}, errorFn(res));
-
-	var query = new AV.Query('DiveLog');
-	query.equalTo('groupId', groupId);
-	query.include('user');
-	query.find().then(function (divelogs) {
-
-		if (divelogs && divelogs.length > 0) {
-			var users = {};
-			for (var i = 0; i < divelogs.length; i++) {
-				var user = divelogs[i].get('user');
-				users.set(user.id, user.toJSON());
-			}
-			res.success(users);
-		}
-		else {
-			res.error({"Error": "GroupId not found"});
-		}
-	}, errorFn(res));
-
 });
 
 AV.Cloud.define('DiveLog.VarifyGroupId', function(req, res) {
