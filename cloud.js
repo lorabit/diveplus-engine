@@ -107,7 +107,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 				newDivelog.set('logUUID', guid());
 				newDivelog.set('isCreator', false);	
 				newDivelog.set('logIndex', logCount + 1);
-				
+
 				newDivelog.save().then(function (divelog) {
 
 					user.set('diveLogCount', logCount + 1);
@@ -156,7 +156,7 @@ AV.Cloud.define('DiveLog.VarifyGroupId', function(req, res) {
 		var query = new AV.Query('DiveLog');
 		query.equalTo('groupId', groupId);
 		query.find().then(function (divelogs) {
-			if (divelogs) {
+			if (divelogs && divelogs.length > 0) {
 				res.success({"GroupId": groupId});
 			}
 			else {
