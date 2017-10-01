@@ -138,18 +138,17 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
 	
 	var groupId = req.params.GroupId;
-	return res.success({"gid":groupId});
 
 	var query = new AV.Query('DiveLog');
 	query.equalTo('groupId', groupId);
 	query.find().then(function (divelogs) {
 
 		if (divelogs && divelogs.length > 0) {
-			var users = {};
-			for (var i = 0; i < divelogs.length; i++) {
-				var user = divelogs[i].get('user');
-				users.set(user.id, user.toJSON());
-			}
+			// var users = {};
+			// for (var i = 0; i < divelogs.length; i++) {
+			// 	var user = divelogs[i].get('user');
+			// 	users.set(user.id, user.toJSON());
+			// }
 			return res.success(users);	
 		}
 		else {
