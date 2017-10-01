@@ -145,7 +145,12 @@ AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
 	query.find().then(function (divelogs) {
 
 		if (divelogs && divelogs.length > 0) {
-			return res.success({"gid":groupId});	
+			var users = {};
+			for (var i = 0; i < divelogs.length; i++) {
+				var user = divelogs[i].get('user');
+				users.set(user.id, user.toJSON());
+			}
+			return res.success(users);	
 		}
 		else {
 			return res.error({"Error": "GroupId not found"});
