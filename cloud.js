@@ -135,19 +135,27 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 });
 
 // 根据userID来获取divelog里面的buddys信息，后续将所有的字段的更新放在后台
-AV.Cloud.define('DiveLog.QueryDiveLog', function(request) {
-	// var UserId = request.params.UserId;
-	// var User = AV.Object.createWithoutData('User', 'UserId');
-	// var query = new AV.Query('DiveLog');
-	// query.equalTo('user', User);
+AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
+	
+	var groupId = req.params.GroupId;
 
-	// query.find().then(function (results) {
+	var query = new AV.Query('DiveLog');
+	query.equalTo('groupId', groupId);
+	query.include('user');
+	query.find().then(function (divelogs) {
+		if (divelogs && divelogs.length > 0) {
+			var users = {};
+			for (var i = 0; i < divelogs.length; i++) {
+				var user = divelogs[i].get('user');
+				users.set(user.id, user.toJSON());
+			}
+			res.success(users);
+		}
+		else {
+			res.error({"Error": "GroupId not found"});
+		}
+	}, errorFn(res));
 
- //  	}, function (error) {
-
- //  	});
-
-	// return { "GroupId": request.params.LogId};
 });
 
 AV.Cloud.define('DiveLog.VarifyGroupId', function(req, res) {
