@@ -145,11 +145,11 @@ AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
 		// res.success({"a":1});
 		// return;
 		if (divelogs && divelogs.length > 0) {
-			var users = {"count":divelogs.length};
-			// for (var i = 0; i < divelogs.length; i++) {
-			// 	var user = divelogs[i].get('user');
-			// 	users.set(user.id, user.toJSON());
-			// }
+			var users = {};
+			for (var i = 0; i < divelogs.length; i++) {
+				var user = divelogs[i].get('user');
+				users[user.id] = user.toJSON();
+			}
 			res.success(users);	
 		}
 		else {
