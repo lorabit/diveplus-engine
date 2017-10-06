@@ -22,7 +22,7 @@ function guid() {
 // 判断是否登录 if(request.currentUser)
 
 AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
-
+	return res.error({"Error":"dsafd"});
 	var logId = req.params.LogId;
 	
 	new AV.Query('DiveLog').get(logId).then(function (divelog) {
@@ -62,6 +62,8 @@ AV.Cloud.define('DiveLog.GetGroupId', function(req, res) {
 });
 
 AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
+	res.error("fdsjklfk");
+
 	var userId = req.params.UserId;
 	var groupId = req.params.GroupId;
 
