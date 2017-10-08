@@ -76,9 +76,21 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 	new AV.Query('_User').get(userId).then(function (user) {		
 		if (user) {
 			var logCount  = user.get('diveLogCount');
+			if (!logCount) {
+				logCount = 0;
+			};
 			var logHour = user.get('diveHourCount');
+			if (!logHour) {
+				logHour = 0;
+			};
 			var logCountLife = user.get('diveLogCountLife');
+			if (!logCountLife) {
+				logCountLife = 0;
+			};
 			var logHourLife = user.get('diveHourCountLife');
+			if (!logHourLife) {
+				logHourLife = 0;
+			};
 
 			var query = new AV.Query('DiveLog');
 			query.equalTo('groupId', groupId);
