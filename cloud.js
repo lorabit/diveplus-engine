@@ -118,7 +118,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 
 					user.save().then(function (divelog) {
 
-						res.success({"LogId": newDivelog.id});
+						res.success({"LogId": newDivelog.id, "logCount": logCount, "logHour": logHour});
 
 					}, errorFn(res));
 
