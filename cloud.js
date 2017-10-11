@@ -69,7 +69,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 	// res.success({"Result": 1});
 
 	if (!Coder.isValid(groupId)) {
-		res.error({"Error":"Invalid group id"});
+		res.error('Invalid group id');
 		return;
 	}
 
@@ -103,7 +103,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 					
 					if (uid.id == userId) {
 						// 去重
-						res.error({"Error":"Already has divelog"});
+						res.error('Already has divelog');
 						return;
 					};
 
@@ -140,7 +140,7 @@ AV.Cloud.define('DiveLog.JoinGroup', function(req, res) {
 
 		}
 		else {
-			res.error({"Error": "No such user"});
+			res.error('No such user');
 		}
 
 	}, errorFn(res));
@@ -167,7 +167,7 @@ AV.Cloud.define('DiveLog.GetGroupUserInfos', function(req, res) {
 			res.success(users);	
 		}
 		else {
-			res.error({"Error": "GroupId not found"});
+			res.error('GroupId not found');
 		}
 
 	}, errorFn(res));
@@ -183,12 +183,12 @@ AV.Cloud.define('DiveLog.VarifyGroupId', function(req, res) {
 				res.success({"GroupId": groupId});
 			}
 			else {
-				res.error({"Error": "GroupId does not exist"});
+				res.error('GroupId does not exist');
 			}
 
 		}, errorFn(res));
 	}
 	else{
-		res.error({"Error": "Wrong GroupId format"})
+		res.error('Wrong GroupId format')
 	}
 });
